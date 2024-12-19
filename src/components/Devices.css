@@ -1,0 +1,113 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+}
+
+.device {
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 800px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.device h1 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #343a40;
+}
+
+.device-block {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  padding: 0.625rem;
+  border: 0.125rem solid #dee2e6;
+  border-radius: 0.5rem;
+  background-color: #f8f9fa;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.device-block:hover {
+  transform: translateY(-0.3125rem);
+  box-shadow: 0 0.375rem 0.75rem rgba(0, 0, 0, 0.2);
+}
+
+.device-status {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  margin-left: 0.5rem;
+  transition: background-color 0.3s ease;
+  border: 0.125rem solid #dee2e6;
+}
+
+.device-status.red {
+  background-color: red;
+}
+
+.device-status.green {
+  background-color: green;
+}
+
+.device-block h2 {
+  font-size: 1.25rem;
+  color: #495057;
+  margin-bottom: 0.3125rem;
+  margin-right: 1rem;
+}
+
+.device-block p {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+button {
+  display: block;
+  margin: 1.25rem auto;
+  padding: 0.625rem 1.25rem;
+  font-size: 1rem;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: translateY(-0.125rem);
+  box-shadow: 0 0.375rem 0.75rem rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 600px) {
+  .device {
+    padding: 0.625rem;
+  }
+
+  .device-block h2 {
+    font-size: 1.125rem;
+  }
+
+  .device-block p {
+    font-size: 0.875rem;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
