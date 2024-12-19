@@ -15,13 +15,13 @@ const Devices = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurr
     device.addListener("noteon", e => {
       console.log(e.note.identifier, e.message.channel);
 
-      notes.push(e.note);
+      setNotes((prevNotes) => [...prevNotes, e.note]);
     });
 
     device.addListener("noteoff", e => {
       console.log(e.note.identifier, e.message.channel);
 
-      notes.splice(notes.indexOf(e.note), 1);
+      setNotes((prevNotes) => prevNotes.filter((note) => note.identifier !== e.note.identifier));
     })
   };
 

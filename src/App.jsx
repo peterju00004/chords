@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { onEnabled } from './utils/midi';
 import Navbar from "./components/Navbar";
 import Devices from "./components/Devices";
+import Home from "./components/Home";
 import './App.css';
 
 function App() {
@@ -22,11 +23,6 @@ function App() {
   //       })
   //   });
   // }, currentDevice);
-
-  function Home() {
-    return <h2>Welcome to the MIDI App</h2>;
-  }
-
   function About() {
     return <h2>About This App</h2>;
   }
@@ -35,7 +31,17 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" 
+          element={
+            <Home midiInputDevices={midiInputDevices}
+              setMidiInputDevices={setMidiInputDevices}
+              currentDevice={currentDevice}
+              setCurrentDevice={setCurrentDevice}
+              notes={notes}
+              setNotes={setNotes}
+            />
+          } 
+        />
         <Route path="/devices"
           element={
             <Devices midiInputDevices={midiInputDevices}
