@@ -26,7 +26,7 @@ export const onEnabled = () => {
  * Returns the designated chord given an array of notes.
  * 
  * @param {Array} notes the array containing the identifiers of notes to detect
- * @returns a chords.
+ * @returns a chords
  */
 export const detection = (notes) => {
     const result = Chord.detect(notes, {assumePerfectFifth: true})[0];
@@ -36,13 +36,13 @@ export const detection = (notes) => {
 
 /**
  * Returns the sorted array of notes on a first number then letter principle based on the {@code pitchOrder} object.
+ * 
  * @example sort([C4, E3, A3, B4]) -> [E3, A3, C4, B4].
  * 
  * @param {Array} notes 
  * @returns the sorted array
  */
 export const sort = (notes) => {
-    // SORT THE NOTES ARRAY:  number first, then letter
     const sortedNotes = notes.sort((a, b) => {
         const [pitchA, octaveA] = [a.slice(0, -1), parseInt(a.slice(-1))];
         const [pitchB, octaveB] = [b.slice(0, -1), parseInt(b.slice(-1))];
@@ -54,6 +54,14 @@ export const sort = (notes) => {
     return sortedNotes;
 }
 
+/**
+ * Normalizes the array of notes.
+ * 
+ * @example normalize([C4, E4, G4]) -> [0, 4, 7]
+ * 
+ * @param {Array} notes 
+ * @returns the array containing normalized notes
+ */
 export const normalize = (notes) => {
     const midiNotes = notes.map(noteToMidi);
 
@@ -64,6 +72,12 @@ export const normalize = (notes) => {
     return normalized.sort((a, b) => a - b);
 }
 
+/**
+ * Rotates to put the bass note (first element) to the last.
+ * @param {Array} notes 
+ * @returns the resulting array after one rotation
+ */
 export const rotate = (notes) => {
-
+    if (notes.length === 0) return notes;
+    return [...notes.slice(1), notes[0]];
 }
