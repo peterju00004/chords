@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
+import { detection } from "../utils/midi";
 
 const Home = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurrentDevice, notes, setNotes }) => {
     return (
         <div>
-            <h2>
-                Current device: {currentDevice 
-                        ? currentDevice.manufacturer + " " + currentDevice.name 
-                        : "No device connected"}
-            </h2>
+            <h1>
+                {
+                    detection(notes.map(note => note.name))
+                }
+            </h1>
             <div>
                 Notes: 
                 {
@@ -16,6 +17,11 @@ const Home = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurrent
                     ))
                 }
             </div>
+            <h2>
+                Current device: {currentDevice 
+                        ? currentDevice.manufacturer + " " + currentDevice.name 
+                        : "No device connected"}
+            </h2>
         </div>
     )
 };
