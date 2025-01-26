@@ -1,8 +1,12 @@
-# React + Vite
+# Chords
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+To run: `npm run dev`
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### TODO:
+- Detection:
+  - Deal with notes with dupliucate names (e.g.: "C2" and "C3").
+  - Rearrange notes to fit within <1 octave>? (have to determine the specific bound).
+  - More patterns of chords and drop fifth voicing
+- UI:
+  - 3D Keyboard
+  - Minor alignment issues.
