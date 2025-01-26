@@ -26,13 +26,51 @@ export const onEnabled = () => {
  * Returns the designated chord given an array of notes.
  * 
  * @param {Array} notes the array containing the identifiers of notes to detect
- * @returns a chords
+ * @returns a chord
  */
 export const detection = (notes) => {
-    const result = Chord.detect(notes, {assumePerfectFifth: true})[0];
-    if (result) return result.replace(/M(?!aj)/g, '');
-    else return null;
+    // const result = Chord.detect(notes, {assumePerfectFifth: true})[0];
+    // if (result) return result.replace(/M(?!aj)/g, '');
+    let base = "", below = "", type = "";
+
+    if (!Array.isArray(notes) || notes.length === 0) return null;
+    
+    notes = sort(notes);
+
+    const normalizedNotes = normalize(notes);
+
+    below = notes[0]; // lowest note
+
+
+    
+    let rotatedNotes = [...normalizedNotes];
+
+    for (let i = 0; i < normalizedNotes.length; i++) { // ith rotation
+        if (i != 0) rotatedNotes = rotate(rotatedNotes);
+
+        for (const pattern of patterns) {
+            const { name, formula } = pattern;
+
+            if (arraysEqual(rotatedNotes, formula)) type = name;
+        }
+
+    }
+
+    for (const pattern of patterns) {
+        const { name, formula } = pattern;
+
+        let rotatedNotes = [...normalizedNotes];
+        for (let i = 0; i < normalizedNotes.length; i++) {
+            if (arraysEqual(rotatedNotes, formula)) return name;
+            rotatedNotes = rotate(rotatedNotes);
+            
+        }
+    }
+
+    return "Unknown";
 } 
+
+
 
 /**
  * Returns the sorted array of notes on a first number then letter principle based on the {@code pitchOrder} object.
@@ -42,7 +80,7 @@ export const detection = (notes) => {
  * @param {Array} notes 
  * @returns the sorted array
  */
-export const sort = (notes) => {
+const sort = (notes) => {
     const sortedNotes = notes.sort((a, b) => {
         const [pitchA, octaveA] = [a.slice(0, -1), parseInt(a.slice(-1))];
         const [pitchB, octaveB] = [b.slice(0, -1), parseInt(b.slice(-1))];
@@ -62,7 +100,7 @@ export const sort = (notes) => {
  * @param {Array} notes 
  * @returns the array containing normalized notes
  */
-export const normalize = (notes) => {
+const normalize = (notes) => {
     const midiNotes = notes.map(noteToMidi);
 
     // normalize to the bass note
@@ -74,10 +112,24 @@ export const normalize = (notes) => {
 
 /**
  * Rotates to put the bass note (first element) to the last.
- * @param {Array} notes 
+ * @param {Array} notes an array of normalized notes
  * @returns the resulting array after one rotation
  */
-export const rotate = (notes) => {
-    if (notes.length === 0) return notes;
-    return [...notes.slice(1), notes[0]];
+const rotate = (notes) => {
+    if (!Array.isArray(notes) || notes.length === 0) return notes;
+
+    const rotated = [...notes.slice(1), notes[0] + 12];
+    const base = rotated[0];
+
+    return rotated.map(note => note - base);
+}
+
+/**
+ * @param {Array} arr1 
+ * @param {Array} arr2 
+ * @returns if the two arrays have the same elements
+ */
+const arraysEqual = (arr1, arr2) => {
+    if (arr1.length !== arr2.length) return false;
+    return arr1.every((value, index) => val === arr2[index]);
 }
