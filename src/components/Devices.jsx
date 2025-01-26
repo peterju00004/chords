@@ -13,8 +13,7 @@ const Devices = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurr
     setCurrentDevice(device);
 
     device.addListener("noteon", e => {
-      console.log(e.note.identifier, e.message.channel);
-
+      // console.log(e.note.identifier, e.message.channel);
       setNotes((prevNotes) => [...prevNotes, e.note]);
     });
 

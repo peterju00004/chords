@@ -1,7 +1,20 @@
 import { WebMidi } from "webmidi";
 import { Chord } from "tonal";
 
-const pitchOrder = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+const pitchOrder = {
+    'C': 0,
+    'C#': 1,
+    'D': 2,
+    'D#': 3,
+    'E': 4,
+    'F': 5,
+    'F#': 6,
+    'G': 7,
+    'G#': 8,
+    'A': 9,
+    'A#': 10,
+    'B': 11
+  };
 
 const patterns = {
     major: [0, 4, 7],
@@ -35,39 +48,64 @@ export const detection = (notes) => {
 
     if (!Array.isArray(notes) || notes.length === 0) return null;
     
+    console.log("notes: " + notes);
+
     notes = sort(notes);
 
     const normalizedNotes = normalize(notes);
 
+    // {
+    //     let r = normalize(["C4", "E4", "G4"]);
+    // }
+
     below = notes[0]; // lowest note
 
-
-    
     let rotatedNotes = [...normalizedNotes];
 
-    for (let i = 0; i < normalizedNotes.length; i++) { // ith rotation
+    const patternArray = Object.entries(patterns).map(([name, formula]) => ({ name, formula }));
+
+    rotation: for (let i = 0; i < normalizedNotes.length; i++) { // ith rotation
         if (i != 0) rotatedNotes = rotate(rotatedNotes);
 
-        for (const pattern of patterns) {
+        for (const pattern of patternArray) {
             const { name, formula } = pattern;
+            base = notes[i];
 
-            if (arraysEqual(rotatedNotes, formula)) type = name;
-        }
-
-    }
-
-    for (const pattern of patterns) {
-        const { name, formula } = pattern;
-
-        let rotatedNotes = [...normalizedNotes];
-        for (let i = 0; i < normalizedNotes.length; i++) {
-            if (arraysEqual(rotatedNotes, formula)) return name;
-            rotatedNotes = rotate(rotatedNotes);
-            
+            if (arraysEqual(rotatedNotes, formula)) {
+                type = name;
+                break rotation;
+            }
         }
     }
 
-    return "Unknown";
+    // format result
+    let result = "";
+    switch (type) {
+        case "":
+            return "Unknown";
+        case "major":
+            type = "";
+            break;
+        case "minor":
+            type = "m";
+            break;
+        case "diminished":
+            type = "dim";
+            break;
+        case "augmented": 
+            type = "aug";
+            break;
+        default:
+            break;
+    }
+    
+    result = result.concat(base.slice(0, -1)).concat(type);
+
+    console.log("below: " + below + ", base: " + base);
+
+    if (below !== base) result = result.concat("/").concat(below.slice(0, -1));
+
+    return result;
 } 
 
 
@@ -85,8 +123,11 @@ const sort = (notes) => {
         const [pitchA, octaveA] = [a.slice(0, -1), parseInt(a.slice(-1))];
         const [pitchB, octaveB] = [b.slice(0, -1), parseInt(b.slice(-1))];
 
+        const semitoneA = pitchOrder[pitchA];
+        const semitoneB = pitchOrder[pitchB];
+
         if (octaveA !== octaveB) return octaveA - octaveB;
-        return pitchOrder.indexOf(pitchA) - pitchOrder.indexOf(pitchB);
+        return semitoneA - semitoneB;
     });
 
     return sortedNotes;
@@ -101,13 +142,18 @@ const sort = (notes) => {
  * @returns the array containing normalized notes
  */
 const normalize = (notes) => {
-    const midiNotes = notes.map(noteToMidi);
+    const [basePitch, baseOctave] = [notes[0].slice(0, -1), parseInt(notes[0].slice(-1))];
 
-    // normalize to the bass note
-    const minNote = Math.min(...midiNotes);
-    const normalized = midiNotes.map(note => note - minNote);
-
-    return normalized.sort((a, b) => a - b);
+    return notes.map(note => {
+      const pitch = note.slice(0, -1);
+      const octave = parseInt(note.slice(-1));
+      
+      // Calculate semitone offset
+      const semitoneOffset = 
+        (octave - baseOctave) * 12 + (pitchOrder[pitch] - pitchOrder[basePitch]);
+  
+      return semitoneOffset;
+    });
 }
 
 /**
@@ -131,5 +177,5 @@ const rotate = (notes) => {
  */
 const arraysEqual = (arr1, arr2) => {
     if (arr1.length !== arr2.length) return false;
-    return arr1.every((value, index) => val === arr2[index]);
+    return arr1.every((value, index) => value === arr2[index]);
 }

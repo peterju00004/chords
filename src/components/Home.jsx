@@ -6,7 +6,7 @@ const Home = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurrent
         <div>
             <h1>
                 {
-                    detection(notes.map(note => note.name))
+                    detection(notes.map(note => note.identifier))
                 }
             </h1>
             <div>
