@@ -13,10 +13,12 @@
 4. To run: `npm run dev`.
 
 ### TODO:
-- Detection:
-  - Deal with notes with dupliucate names (e.g.: "C2" and "C3").
-  - Rearrange notes to fit within 2 octaves.
-  - More patterns of chords and drop fifth voicing
-- UI:
-  - 3D Keyboard
-  - Minor alignment issues.
+- General
+  - Detection:
+    - Rearrange notes to fit within 2 octaves.
+    - More patterns of chords and drop fifth voicing
+  - UI:
+    - 3D Keyboard
+    - Minor alignment issues.
+- List: 
+  - Test new normalize function and if it solves the basic-rotation problem.

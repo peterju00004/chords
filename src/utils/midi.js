@@ -1,5 +1,4 @@
 import { WebMidi } from "webmidi";
-import { Chord } from "tonal";
 
 const pitchOrder = {
     'C': 0,
@@ -42,24 +41,15 @@ export const onEnabled = () => {
  * @returns a chord
  */
 export const detection = (notes) => {
-    // const result = Chord.detect(notes, {assumePerfectFifth: true})[0];
-    // if (result) return result.replace(/M(?!aj)/g, '');
-    let base = "", below = "", type = "";
-
     if (!Array.isArray(notes) || notes.length === 0) return null;
     
-    console.log("notes: " + notes);
+    let base = "", below = "", type = "";
 
-    notes = sort(notes);
-
-    const normalizedNotes = normalize(notes);
-
-    // {
-    //     let r = normalize(["C4", "E4", "G4"]);
-    // }
-
+    // sort, remove duplicate, and scale within two octaves
+    notes = removeOctaves(sort(notes));
     below = notes[0]; // lowest note
 
+    const normalizedNotes = normalize(notes);
     let rotatedNotes = [...normalizedNotes];
 
     const patternArray = Object.entries(patterns).map(([name, formula]) => ({ name, formula }));
@@ -142,18 +132,15 @@ const sort = (notes) => {
  * @returns the array containing normalized notes
  */
 const normalize = (notes) => {
-    const [basePitch, baseOctave] = [notes[0].slice(0, -1), parseInt(notes[0].slice(-1))];
-
-    return notes.map(note => {
-      const pitch = note.slice(0, -1);
-      const octave = parseInt(note.slice(-1));
-      
-      // Calculate semitone offset
-      const semitoneOffset = 
-        (octave - baseOctave) * 12 + (pitchOrder[pitch] - pitchOrder[basePitch]);
-  
-      return semitoneOffset;
-    });
+    const normalize = (notes) => {
+        const basePitch = pitchOrder[notes[0].slice(0, -1)];
+    
+        return notes.map(note => {
+            const pitch = note.slice(0, -1);
+            const semitoneOffset = (pitchOrder[pitch] - basePitch + 12) % 12; // Normalize within an octave
+            return semitoneOffset;
+        }).sort((a, b) => a - b); // Ensure sorted order for pattern matching
+    };
 }
 
 /**
@@ -179,3 +166,18 @@ const arraysEqual = (arr1, arr2) => {
     if (arr1.length !== arr2.length) return false;
     return arr1.every((value, index) => value === arr2[index]);
 }
+
+/**
+ * 
+ * @param {Array} notes 
+ * @returns the array of notes without octaves
+ */
+const removeOctaves = (notes) => {
+    const seen = new Set();
+    return notes.filter(note => {
+        const pitch = note.slice(0, -1);
+        if (seen.has(pitch)) return false;
+        seen.add(pitch);
+        return true;
+    });
+};
