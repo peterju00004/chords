@@ -132,15 +132,13 @@ const sort = (notes) => {
  * @returns the array containing normalized notes
  */
 const normalize = (notes) => {
-    const normalize = (notes) => {
-        const basePitch = pitchOrder[notes[0].slice(0, -1)];
-    
-        return notes.map(note => {
-            const pitch = note.slice(0, -1);
-            const semitoneOffset = (pitchOrder[pitch] - basePitch + 12) % 12; // Normalize within an octave
-            return semitoneOffset;
-        }).sort((a, b) => a - b); // Ensure sorted order for pattern matching
-    };
+    const basePitch = pitchOrder[notes[0].slice(0, -1)];
+
+    return notes.map(note => {
+        const pitch = note.slice(0, -1);
+        const semitoneOffset = (pitchOrder[pitch] - basePitch + 12) % 12; // Normalize within an octave
+        return semitoneOffset;
+    }).sort((a, b) => a - b); // Ensure sorted order for pattern matching
 }
 
 /**

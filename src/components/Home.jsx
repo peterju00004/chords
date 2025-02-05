@@ -12,8 +12,10 @@ const Home = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurrent
             <div>
                 Notes: 
                 {
-                    notes.map((eachNote) => (
-                        <span>{eachNote.identifier}</span>
+                    notes.map((eachNote, index) => (
+                        <span key={eachNote.identifier || index}>
+                            {eachNote.identifier}
+                        </span>
                     ))
                 }
             </div>
