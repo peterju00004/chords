@@ -5,6 +5,10 @@ body {
   background-color: #f8f9fa;
 }
 
+.device-container {
+  text-align: center;
+}
+
 .device {
   margin: 20px auto;
   padding: 20px;

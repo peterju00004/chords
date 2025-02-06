@@ -1,16 +1,7 @@
 import * as THREE from 'three';
 import React, { useEffect, useRef } from "react";
 
-const PIANO_CONFIG = {
-    whiteKeyWidth: 1,
-    whiteKeyHeight: 0.2,
-    whiteKeyDepth: 5,
-    blackKeyWidth: 0.6,
-    blackKeyHeight: 0.2,
-    blackKeyDepth: 3,
-    startNote: 48, // C3
-    endNote: 72,   // C5
-};
+const START_X = -11.5;
 
 const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurrentDevice, notes, setNotes }) => {
     const refContainer = useRef(null);
@@ -76,39 +67,69 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
     };
 
     const createPianoKeys = (scene) => {
-        for (let index = 0; index < 7; index++) {
-            const geometry = new THREE.BoxGeometry( 0.5, 1, 4 );
-            const edges = new THREE.EdgesGeometry( geometry ); 
-            const line = new THREE.LineSegments( edges, new THREE.LineBasicMaterial( { color: 0x000000 } ) );
+        for (let i = 0; i < 7; i++) {
+            for (let index = 0; index < 7; index++) {
+                const geometry = new THREE.BoxGeometry(0.5, 1, 4);
+                const edges = new THREE.EdgesGeometry(geometry);
+                const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000 }));
 
-            // let red = getRandomInt(255);
-            // let green = getRandomInt(255);
-            // let blue = getRandomInt(255);
+                const material = new THREE.MeshPhongMaterial({ color: 0xffffee });
+                const cube = new THREE.Mesh(geometry, material);
+                cube.position.x = START_X + 1 + 0.5 * index + i * 3.5;
+                line.position.x = cube.position.x;
+                scene.add(cube);
+                scene.add(line);
+            }
 
-            // const color = new THREE.Color(`rgb(${red}, ${green}, ${blue})`);
-            // const material = new THREE.MeshPhongMaterial( { color: color } );
-            const material = new THREE.MeshPhongMaterial( { color: 0xffffee } );
-            const cube = new THREE.Mesh( geometry, material );
-            cube.position.x = 0.5 * index;
-            line.position.x = cube.position.x;
-            scene.add( cube );
-            scene.add( line );
+            for (let index = 0; index < 2; index++) {
+                const geometry = new THREE.BoxGeometry(0.25, 0.5, 2.5);
+                const material = new THREE.MeshPhongMaterial({ color: 0x1e1e1e });
+                const cube = new THREE.Mesh(geometry, material);
+                cube.position.set(START_X + 1 + 0.25 + (0.5 * index) + i * 3.5, 0.5, -0.5);
+                scene.add(cube);
+            }
+
+            for (let index = 0; index < 3; index++) {
+                const geometry = new THREE.BoxGeometry(0.25, 0.5, 2.5);
+                const material = new THREE.MeshPhongMaterial({ color: 0x1e1e1e });
+                const cube = new THREE.Mesh(geometry, material);
+                cube.position.set(START_X + 1 + 1.75 + (0.5 * index) + i * 3.5, 0.5, -0.5);
+                scene.add(cube);
+            }
         }
 
         for (let index = 0; index < 2; index++) {
-            const geometry = new THREE.BoxGeometry( 0.25, 0.5, 2.5 );
-            const material = new THREE.MeshPhongMaterial( { color: 0x1e1e1e } );
-            const cube = new THREE.Mesh( geometry, material );
-            cube.position.set(0.25 + (0.5 * index), 0.5, -0.5);
-            scene.add( cube );
+            const geometry = new THREE.BoxGeometry(0.5, 1, 4);
+            const edges = new THREE.EdgesGeometry(geometry);
+            const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000 }));
+
+            const material = new THREE.MeshPhongMaterial({ color: 0xffffee });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.position.x = START_X + 0.5 * index;
+            line.position.x = cube.position.x;
+            scene.add(cube);
+            scene.add(line);
         }
 
-        for (let index = 0; index < 3; index++) {
-            const geometry = new THREE.BoxGeometry( 0.25, 0.5, 2.5 );
-            const material = new THREE.MeshPhongMaterial( { color: 0x1e1e1e } );
-            const cube = new THREE.Mesh( geometry, material );
-            cube.position.set(1.75 + (0.5 * index), 0.5, -0.5);
-            scene.add( cube );
+        for (let index = 0; index < 1; index++) {
+            const geometry = new THREE.BoxGeometry(0.25, 0.5, 2.5);
+            const material = new THREE.MeshPhongMaterial({ color: 0x1e1e1e });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.position.set(START_X + 0.25, 0.5, -0.5);
+            scene.add(cube);
+        }
+
+        for (let index = 0; index < 1; index++) {
+            const geometry = new THREE.BoxGeometry(0.5, 1, 4);
+            const edges = new THREE.EdgesGeometry(geometry);
+            const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000 }));
+
+            const material = new THREE.MeshPhongMaterial({ color: 0xffffee });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.position.x = START_X + 1 + 7 * 3.5;
+            line.position.x = cube.position.x;
+            scene.add(cube);
+            scene.add(line);
         }
     };
 
