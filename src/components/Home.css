@@ -1,0 +1,31 @@
+.home-container {
+  top: auto;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px - 2rem);
+  padding-top: calc(60px + 2rem);
+  align-items: center;
+  overflow: hidden;
+}
+
+.home-top {
+  padding: 10px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.home-middle {
+  flex-grow: 1;
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-bottom {
+  padding: 10px;
+  background-color: #f8f9fa;
+  text-align: center;
+  flex-shrink: 0;
+}
