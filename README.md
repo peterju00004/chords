@@ -13,9 +13,9 @@
 4. To run: `npm run dev`.
 
 ### TODO:
-- General
-  - Detection:
-    - More patterns of chords and drop fifth voicing
-  - UI:
-    - 3D Keyboard
-    - Minor alignment issues.
+- Detection:
+ - More patterns of chords and drop fifth voicing
+- UI:
+ - Syncing keyboard with notes played.
+ - About page
+ - Setting page? (prioritize sharps/flats/both, drop fifth)?
