@@ -14,8 +14,8 @@
 
 ### TODO:
 - Detection:
- - More patterns of chords and drop fifth voicing
+  - More patterns of chords and drop fifth voicing
 - UI:
- - Syncing keyboard with notes played.
- - About page
- - Setting page? (prioritize sharps/flats/both, drop fifth)?
+  - Syncing keyboard with notes played.
+  - About page
+  - Setting page? (prioritize sharps/flats/both, drop fifth)?
