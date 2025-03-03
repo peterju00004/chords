@@ -2,6 +2,7 @@
 
 ## Introduction
 ![A demonstration of Chords](./public/demo.gif)
+
 Chords is an online chord detection application developed by Peter Ju.
 
 By connecting your laptop to a MIDI Input source, Chords detects the corresponding chord you are playing real-time.
