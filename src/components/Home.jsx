@@ -21,7 +21,7 @@ const Home = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurrent
                 </div>
             </div>
             <div className="home-middle">
-                <Keyboard />
+                <Keyboard notes={notes.map(note => note.identifier)}/>
             </div>
             <div className="home-bottom">
                 <h2>

@@ -5,6 +5,19 @@ const START_X = -11.5;
 
 const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurrentDevice, notes, setNotes }) => {
     const refContainer = useRef(null);
+    const keys = useRef({});
+
+    useEffect(() => {
+        Object.keys(keys.current).forEach(key => {
+            if (notes.includes(key)) {
+                keys.current[key].material.color.setHex(0xff0000);
+            } else {
+                if (key.includes("#")) {
+                    keys.current[key].material.color.setHex(0x1e1e1e);
+                } else keys.current[key].material.color.setHex(0xffffee);
+            }
+        });
+    }, [notes]);
 
     useEffect(() => {
         const container = refContainer.current;
@@ -79,6 +92,36 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
                 line.position.x = cube.position.x;
                 scene.add(cube);
                 scene.add(line);
+
+                let name;
+                // mapping
+                switch (index) {
+                    case 0:
+                        name = "C";
+                        break;
+                    case 1:
+                        name = "D";
+                        break;
+                    case 2:
+                        name = "E";
+                        break;
+                    case 3:
+                        name = "F";
+                        break;
+                    case 4:
+                        name = "G";
+                        break;
+                    case 5:
+                        name = "A";
+                        break;
+                    case 6:
+                        name = "B";
+                        break;
+                    default:
+                        break;
+                }
+
+                keys.current[`${name}${i + 1}`] = cube;
             }
 
             for (let index = 0; index < 2; index++) {
@@ -87,6 +130,12 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
                 const cube = new THREE.Mesh(geometry, material);
                 cube.position.set(START_X + 1 + 0.25 + (0.5 * index) + i * 3.5, 0.5, -0.5);
                 scene.add(cube);
+
+                if (index === 0) {
+                    keys.current[`C#${i + 1}`] = cube;
+                } else {
+                    keys.current[`D#${i + 1}`] = cube;
+                }
             }
 
             for (let index = 0; index < 3; index++) {
@@ -95,6 +144,16 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
                 const cube = new THREE.Mesh(geometry, material);
                 cube.position.set(START_X + 1 + 1.75 + (0.5 * index) + i * 3.5, 0.5, -0.5);
                 scene.add(cube);
+
+                if (index === 0) {
+                    keys.current[`F#${i + 1}`] = cube;
+                }
+                if (index === 1) {
+                    keys.current[`G#${i + 1}`] = cube;
+                }
+                if (index === 2) {
+                    keys.current[`A#${i + 1}`] = cube;
+                }
             }
         }
 
@@ -109,6 +168,12 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
             line.position.x = cube.position.x;
             scene.add(cube);
             scene.add(line);
+
+            if (index === 0) {
+                keys.current["A0"] = cube;
+            } else {
+                keys.current["B0"] = cube;
+            }
         }
 
         for (let index = 0; index < 1; index++) {
@@ -117,6 +182,8 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
             const cube = new THREE.Mesh(geometry, material);
             cube.position.set(START_X + 0.25, 0.5, -0.5);
             scene.add(cube);
+
+            keys.current["A#0"] = cube;
         }
 
         for (let index = 0; index < 1; index++) {
@@ -130,6 +197,8 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
             line.position.x = cube.position.x;
             scene.add(cube);
             scene.add(line);
+
+            keys.current["C8"] = cube;
         }
     };
 
