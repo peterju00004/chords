@@ -89,7 +89,7 @@ export const detection = (notes) => {
     let result = "";
     switch (type) {
         case "":
-            return "Unknown";
+            return null;
         case "major":
             type = "";
             break;

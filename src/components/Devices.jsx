@@ -31,8 +31,8 @@ const Devices = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurr
   return (
     <div className="device-container">
       <h1>Devices</h1>
-      <p>This is the Devices page where you can see the connected MIDI devices.</p>
-      <div className="device">
+      <p className="roboto-font">This is the Devices page where you can see the connected MIDI devices.</p>
+      <div className="device roboto-font">
         Devices:
         {midiInputDevices.map((device) => (
           <div key={device.id} className="device-block" onClick={() => handleClick(device)}>

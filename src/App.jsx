@@ -4,6 +4,7 @@ import { onEnabled } from './utils/midi';
 import Navbar from "./components/Navbar";
 import Devices from "./components/Devices";
 import Home from "./components/Home";
+import About from './components/About';
 import './App.css';
 
 function App() {
@@ -23,9 +24,6 @@ function App() {
   //       })
   //   });
   // }, currentDevice);
-  function About() {
-    return <h2>About This App</h2>;
-  }
 
   return (
     <>

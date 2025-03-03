@@ -2,3 +2,13 @@
     margin: 0 auto;
     width: 100%;
 }
+
+.roboto-font {
+    font-family: "Roboto", serif;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+    font-variation-settings:
+      "wdth" 100;
+  }
+  

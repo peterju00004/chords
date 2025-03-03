@@ -7,7 +7,7 @@ const Home = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurrent
     return (
         <div className="home-container">
             <div className="home-top">
-                <h1>{(() => {
+                <h1 className="roboto-font">{(() => {
                     const res = detection(notes.map(note => note.identifier));
                     return res == null ? "\u00A0" : res;
                 })()}</h1>
@@ -24,7 +24,7 @@ const Home = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurrent
                 <Keyboard notes={notes.map(note => note.identifier)}/>
             </div>
             <div className="home-bottom">
-                <h2>
+                <h2 className="roboto-font">
                     Current device: {currentDevice
                         ? `${currentDevice.manufacturer} ${currentDevice.name}`
                         : "No device connected"}

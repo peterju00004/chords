@@ -7,7 +7,7 @@ function Navbar() {
     <nav>
       <div className="navbar-container">
         <h1 className="logo">Chords</h1>
-        <ul>
+        <ul className="roboto-font">
           <li><Link to="/">Home</Link></li>
           <li><Link to="/devices">Devices</Link></li>
           <li><Link to="/about">About</Link></li>

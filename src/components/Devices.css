@@ -27,7 +27,9 @@ body {
 
 .device-block {
   display: flex;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-around;
   margin: 1rem 0;
   padding: 0.625rem;
   border: 0.125rem solid #dee2e6;
@@ -36,6 +38,11 @@ body {
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   cursor: pointer;
+}
+
+.device-block > * {
+  margin: 0;
+  margin-right: 2rem;
 }
 
 .device-block:hover {
