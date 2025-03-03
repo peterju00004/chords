@@ -11,14 +11,14 @@ const Home = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurrent
                     const res = detection(notes.map(note => note.identifier));
                     return res == null ? "\u00A0" : res;
                 })()}</h1>
-                <div>
+                {/* <div>
                     Notes:
                     {notes.map((eachNote, index) => (
                         <span key={eachNote.identifier || index}>
                             {eachNote.identifier}{" "}
                         </span>
                     ))}
-                </div>
+                </div> */}
             </div>
             <div className="home-middle">
                 <Keyboard notes={notes.map(note => note.identifier)}/>
