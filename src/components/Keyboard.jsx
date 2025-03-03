@@ -1,7 +1,22 @@
 import * as THREE from 'three';
 import React, { useEffect, useRef } from "react";
 
-const START_X = -11.5;
+const pianoSpecs = {
+    white: {
+        width: 0.9,
+        height: 1.8,
+        depth: 7.2,
+        color: 0xffffee
+    },
+    black: {
+        width: 0.45,
+        height: 0.9,
+        depth: 4.5,
+        color: 0x3f3f3f
+    }
+};
+
+const START_X = -26.0 * pianoSpecs.white.width;
 
 const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurrentDevice, notes, setNotes }) => {
     const refContainer = useRef(null);
@@ -13,8 +28,8 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
                 keys.current[key].material.color.setHex(0xff0000);
             } else {
                 if (key.includes("#")) {
-                    keys.current[key].material.color.setHex(0x1e1e1e);
-                } else keys.current[key].material.color.setHex(0xffffee);
+                    keys.current[key].material.color.setHex(pianoSpecs.black.color);
+                } else keys.current[key].material.color.setHex(pianoSpecs.white.color);
             }
         });
     }, [notes]);
@@ -30,18 +45,27 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
 
         const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
         camera.position.set(0, 15, 10);
+        // camera.position.set(0, -10,0)/
         camera.lookAt(0, 0, 0);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new THREE.WebGLRenderer();
         renderer.setSize(width, height);
         // Append renderer's DOM element to the container instead of document.body:
         container.appendChild(renderer.domElement);
 
-        const light = new THREE.DirectionalLight(0xffffee, 3);
-        light.position.set(0, 5, 1);
-        scene.add(light);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+        const light1 = new THREE.DirectionalLight(0xffffee, 1);
+        light1.position.set(-10, 5, 0);
+        const ligh2 = new THREE.DirectionalLight(0xffffee, 1);
+        ligh2.position.set(10, 5, 0);
+        scene.add(light1);
+        scene.add(ligh2);
 
         createPianoKeys(scene);
+
+        light1.target = keys.current["C2"];
+        ligh2.target = keys.current["C6"];
 
         const animate = () => {
             if (resizeRendererToDisplaySize(renderer, container)) {
@@ -82,13 +106,17 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
     const createPianoKeys = (scene) => {
         for (let i = 0; i < 7; i++) {
             for (let index = 0; index < 7; index++) {
-                const geometry = new THREE.BoxGeometry(0.5, 1, 4);
+                const geometry = new THREE.BoxGeometry(
+                    pianoSpecs.white.width,
+                    pianoSpecs.white.height,
+                    pianoSpecs.white.depth
+                );
                 const edges = new THREE.EdgesGeometry(geometry);
                 const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000 }));
 
-                const material = new THREE.MeshPhongMaterial({ color: 0xffffee });
+                const material = new THREE.MeshPhongMaterial({ color: pianoSpecs.white.color, shininess: 100});
                 const cube = new THREE.Mesh(geometry, material);
-                cube.position.x = START_X + 1 + 0.5 * index + i * 3.5;
+                cube.position.x = START_X + 2 * pianoSpecs.white.width + pianoSpecs.white.width * index + i * 7 * pianoSpecs.white.width;
                 line.position.x = cube.position.x;
                 scene.add(cube);
                 scene.add(line);
@@ -125,10 +153,14 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
             }
 
             for (let index = 0; index < 2; index++) {
-                const geometry = new THREE.BoxGeometry(0.25, 0.5, 2.5);
-                const material = new THREE.MeshPhongMaterial({ color: 0x1e1e1e });
+                const geometry = new THREE.BoxGeometry(
+                    pianoSpecs.black.width,
+                    pianoSpecs.black.height,
+                    pianoSpecs.black.depth
+                );
+                const material = new THREE.MeshPhongMaterial({ color: pianoSpecs.black.color, shininess: 150 });
                 const cube = new THREE.Mesh(geometry, material);
-                cube.position.set(START_X + 1 + 0.25 + (0.5 * index) + i * 3.5, 0.5, -0.5);
+                cube.position.set(START_X + pianoSpecs.white.width * 2 + pianoSpecs.black.width + (pianoSpecs.white.width * index) + i * 7 * pianoSpecs.white.width, pianoSpecs.white.width, -pianoSpecs.white.width);
                 scene.add(cube);
 
                 if (index === 0) {
@@ -139,10 +171,14 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
             }
 
             for (let index = 0; index < 3; index++) {
-                const geometry = new THREE.BoxGeometry(0.25, 0.5, 2.5);
-                const material = new THREE.MeshPhongMaterial({ color: 0x1e1e1e });
+                const geometry = new THREE.BoxGeometry(
+                    pianoSpecs.black.width,
+                    pianoSpecs.black.height,
+                    pianoSpecs.black.depth
+                );
+                const material = new THREE.MeshPhongMaterial({ color: pianoSpecs.black.color, shininess: 150 });
                 const cube = new THREE.Mesh(geometry, material);
-                cube.position.set(START_X + 1 + 1.75 + (0.5 * index) + i * 3.5, 0.5, -0.5);
+                cube.position.set(START_X + pianoSpecs.white.width * 2 + 7 * pianoSpecs.black.width + (pianoSpecs.white.width * index) + i * 7 * pianoSpecs.white.width, pianoSpecs.white.width, -pianoSpecs.white.width);
                 scene.add(cube);
 
                 if (index === 0) {
@@ -158,13 +194,17 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
         }
 
         for (let index = 0; index < 2; index++) {
-            const geometry = new THREE.BoxGeometry(0.5, 1, 4);
+            const geometry = new THREE.BoxGeometry(
+                pianoSpecs.white.width,
+                pianoSpecs.white.height,
+                pianoSpecs.white.depth
+            );
             const edges = new THREE.EdgesGeometry(geometry);
             const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000 }));
 
-            const material = new THREE.MeshPhongMaterial({ color: 0xffffee });
+            const material = new THREE.MeshPhongMaterial({ color: pianoSpecs.white.color });
             const cube = new THREE.Mesh(geometry, material);
-            cube.position.x = START_X + 0.5 * index;
+            cube.position.x = START_X + pianoSpecs.white.width * index;
             line.position.x = cube.position.x;
             scene.add(cube);
             scene.add(line);
@@ -177,28 +217,88 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
         }
 
         for (let index = 0; index < 1; index++) {
-            const geometry = new THREE.BoxGeometry(0.25, 0.5, 2.5);
-            const material = new THREE.MeshPhongMaterial({ color: 0x1e1e1e });
+            const geometry = new THREE.BoxGeometry(
+                pianoSpecs.black.width,
+                pianoSpecs.black.height,
+                pianoSpecs.black.depth
+            );
+            const material = new THREE.MeshPhongMaterial({ color: pianoSpecs.black.color, shininess: 150 });
             const cube = new THREE.Mesh(geometry, material);
-            cube.position.set(START_X + 0.25, 0.5, -0.5);
+            cube.position.set(START_X + pianoSpecs.black.width, pianoSpecs.white.width, -pianoSpecs.white.width);
             scene.add(cube);
 
             keys.current["A#0"] = cube;
         }
 
         for (let index = 0; index < 1; index++) {
-            const geometry = new THREE.BoxGeometry(0.5, 1, 4);
+            const geometry = new THREE.BoxGeometry(
+                pianoSpecs.white.width,
+                pianoSpecs.white.height,
+                pianoSpecs.white.depth
+            );
             const edges = new THREE.EdgesGeometry(geometry);
             const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x000000 }));
 
-            const material = new THREE.MeshPhongMaterial({ color: 0xffffee });
+            const material = new THREE.MeshPhongMaterial({ color: pianoSpecs.white.color });
             const cube = new THREE.Mesh(geometry, material);
-            cube.position.x = START_X + 1 + 7 * 3.5;
+            cube.position.x = START_X + 2 * pianoSpecs.white.width + 7 * 7 * pianoSpecs.white.width;
             line.position.x = cube.position.x;
             scene.add(cube);
             scene.add(line);
 
             keys.current["C8"] = cube;
+        }
+
+        {
+            const geometry = new THREE.BoxGeometry(
+                7 * 7 * pianoSpecs.white.width + 3 * pianoSpecs.white.width,
+                pianoSpecs.white.height * 2.2,
+                pianoSpecs.white.depth / 2.0
+            );
+
+            const material = new THREE.MeshPhongMaterial({ color: pianoSpecs.black.color });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.position.set(0, 0, -5);
+            scene.add(cube);
+        }
+
+        {
+            const geometry = new THREE.BoxGeometry(
+                2 * pianoSpecs.white.width,
+                pianoSpecs.white.height * 2.2,
+                pianoSpecs.white.depth * 1.5,
+            );
+
+            const material = new THREE.MeshPhongMaterial({ color: pianoSpecs.black.color });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.position.set(START_X - 1, 0, -1.43);
+            scene.add(cube);
+        }
+
+        {
+            const geometry = new THREE.BoxGeometry(
+                2 * pianoSpecs.white.width,
+                pianoSpecs.white.height * 2.2,
+                pianoSpecs.white.depth * 1.5,
+            );
+
+            const material = new THREE.MeshPhongMaterial({ color: pianoSpecs.black.color });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.position.set(-START_X + 1, 0, -1.43);
+            scene.add(cube);
+        }
+
+        {
+            const geometry = new THREE.BoxGeometry(
+                7 * 7 * pianoSpecs.white.width + 3 * pianoSpecs.white.width,
+                pianoSpecs.black.height,
+                pianoSpecs.white.depth * 1.5
+            );
+
+            const material = new THREE.MeshPhongMaterial({ color: pianoSpecs.black.color });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.position.set(0, -1, -1.5);
+            scene.add(cube);
         }
     };
 
