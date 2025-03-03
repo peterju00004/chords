@@ -60,7 +60,7 @@ export const detection = (notes) => {
     
     let base = "", below = "", type = "";
 
-    // sort, remove duplicate, and scale within two octaves
+    // sort, remove duplicate
     notes = removeOctaves(sort(notes));
     below = notes[0]; // lowest note
 
