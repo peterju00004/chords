@@ -13,28 +13,36 @@ const pitchOrder = {
     'A': 9,
     'A#': 10,
     'B': 11
-  };
+};
+
+const sharpToFlat = {
+    "C#": "Db",
+    "D#": "Eb",
+    "F#": "Gb",
+    "G#": "Ab",
+    "A#": "Bb"
+};
 
 const patterns = {
-    major: [0, 4, 7],
-    minor: [0, 3, 7],
-    diminished: [0, 3, 6],
-    augmented: [0, 4, 8],
-    major7: [0, 4, 7, 11],
-    minor7: [0, 3, 7, 10],
-    dominant7: [0, 4, 7, 10],
-    diminished7: [0, 3, 6, 9],
-    halfDiminished7: [0, 3, 6, 10],
-    augmented7: [0, 4, 8, 10],
-    minormajor7: [0, 3, 7, 11],
-    sus2: [0, 2, 7],
-    sus4: [0, 5, 7],
-    major6: [0, 4, 7, 9],
-    minor6: [0, 3, 7, 9],
-    add2: [0, 2, 4, 7],
-    major9: [0, 2, 4, 7, 11],
-    minor9: [0, 2, 3, 7, 10],
-    dominant9: [0, 2, 4, 7, 10],
+    "maj" : [0, 4, 7],
+    "m": [0, 3, 7],
+    "dim": [0, 3, 6],
+    "aug": [0, 4, 8],
+    "maj7": [0, 4, 7, 11],
+    "m7": [0, 3, 7, 10],
+    "7": [0, 4, 7, 10],
+    "dim7": [0, 3, 6, 9],
+    "m7b5": [0, 3, 6, 10],
+    "aug7": [0, 4, 8, 10],
+    "m/maj7": [0, 3, 7, 11],
+    "sus2": [0, 2, 7],
+    "sus4": [0, 5, 7],
+    "maj6": [0, 4, 7, 9],
+    "m6": [0, 3, 7, 9],
+    "add2": [0, 2, 4, 7],
+    "maj9": [0, 2, 4, 7, 11],
+    "m9": [0, 2, 3, 7, 10],
+    "9": [0, 2, 4, 7, 10],
 };
 
 WebMidi
@@ -55,107 +63,68 @@ export const onEnabled = () => {
  * @param {Array} notes the array containing the identifiers of notes to detect
  * @returns a chord
  */
-export const detection = (notes) => {
+export const detection = (notes, displayMode) => {
     if (!Array.isArray(notes) || notes.length === 0) return null;
     
-    let base = "", below = "", type = "";
+    let base = "", type = null, result = null;
 
     // sort, remove duplicate
     notes = removeOctaves(sort(notes));
-    below = notes[0]; // lowest note
 
-    const normalizedNotes = normalize(notes);
-    let rotatedNotes = [...normalizedNotes];
+    /**
+     * The lowest note in the series.
+     */
+    let below = notes[0].slice(0, -1);
 
-    const patternArray = Object.entries(patterns).map(([name, formula]) => ({ name, formula }));
-
-    rotation: for (let i = 0; i < normalizedNotes.length; i++) { // ith rotation
-        if (i != 0) rotatedNotes = rotate(rotatedNotes);
-
-        console.log(rotatedNotes);
-        
-        for (const pattern of patternArray) {
-            const { name, formula } = pattern;
-            base = notes[i];
-
-            if (arraysEqual(rotatedNotes, formula)) {
-                type = name;
-                break rotation;
+    const tryPatternMatching = (notes) => {
+        const normalizedNotes = normalize(notes);
+        let rotatedNotes = [...normalizedNotes];
+    
+        const patternArray = Object.entries(patterns).map(([name, formula]) => ({ name, formula }));
+    
+        rotation: for (let i = 0; i < normalizedNotes.length; i++) { // ith rotation
+            if (i != 0) rotatedNotes = rotate(rotatedNotes);
+    
+            console.log(rotatedNotes);
+            
+            for (const pattern of patternArray) {
+                const { name, formula } = pattern;
+                base = notes[i];
+    
+                if (arraysEqual(rotatedNotes, formula)) {
+                    type = name;
+                    break rotation;
+                }
             }
         }
-    }
 
-    // format result
-    let result = "";
-    switch (type) {
-        case "":
-            return null;
-        case "major":
-            type = "";
-            break;
-        case "minor":
-            type = "m";
-            break;
-        case "diminished":
-            type = "dim";
-            break;
-        case "augmented": 
-            type = "aug";
-            break;
-        case "major7":
-            type = "maj7";
-            break;
-        case "minor7":
-            type = "m7";
-            break;
-        case "dominant7":
-            type = "7";
-            break;
-        case "diminished7":
-            type = "dim7";
-            break;
-        case "halfDiminished7":
-            type = "m7b5";
-            break;
-        case "minormajor7":
-            type = "m/maj7";
-            break;
-        case "augmented7":
-            type = "aug7";
-            break;
-        case "sus2":
-            type = "sus2";
-            break;
-        case "sus4":
-            type = "sus4";
-            break;
-        case "major6":
-            type = "maj6";
-            break;
-        case "minor6":
-            type = "m6";
-            break;
-        case "add2":
-            type = "add2";
-            break;
-        case "major9":
-            type = "maj9";
-            break;
-        case "minor9":
-            type = "m9";
-            break;
-        case "dominant9":
-            type = "9";
-            break;
-        default:
-            break;
-    }
+
+        if (!type) return null;
+        else if (type === "maj") type = "";
+
+        result = base.slice(0, -1).concat(type);
+
+        // console.log("below: " + below + ", base: " + base);
+        
+        if (displayMode === "flats") {
+            result = result.replace(/C#|D#|F#|G#|A#/g, match => sharpToFlat[match]);
+        }
     
-    result = result.concat(base.slice(0, -1)).concat(type);
+        if (below !== base.slice(0, -1)) {
+            if (displayMode === "flats") below = below.replace(/C#|D#|F#|G#|A#/g, match => sharpToFlat[match]);
+    
+            result = result.concat("/").concat(below);
+        }
 
-    console.log("below: " + below + ", base: " + base);
+        return result;
+    }
 
-    if (below !== base) result = result.concat("/").concat(below.slice(0, -1));
+    result = tryPatternMatching(notes);
+
+    if (!result && notes.length > 1) {
+        const notesWithoutLowest = notes.slice(1);
+        result = tryPatternMatching(notesWithoutLowest)
+    }
 
     return result;
 } 

@@ -3,12 +3,12 @@ import Keyboard from "./Keyboard";
 import { detection } from "../utils/midi";
 import "./Home.css";
 
-const Home = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCurrentDevice, notes, setNotes }) => {
+const Home = ({ currentDevice, notes, displayMode }) => {
     return (
         <div className="home-container">
             <div className="home-top">
                 <h1 className="roboto-font">{(() => {
-                    const res = detection(notes.map(note => note.identifier));
+                    const res = detection(notes.map(note => note.identifier), displayMode);
                     return res == null ? "\u00A0" : res;
                 })()}</h1>
                 {/* <div>

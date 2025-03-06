@@ -57,15 +57,15 @@ const Keyboard = ({ midiInputDevices, setMidiInputDevices, currentDevice, setCur
         scene.add(ambientLight);
         const light1 = new THREE.DirectionalLight(0xffffee, 1);
         light1.position.set(-10, 5, 0);
-        const ligh2 = new THREE.DirectionalLight(0xffffee, 1);
-        ligh2.position.set(10, 5, 0);
+        const light2 = new THREE.DirectionalLight(0xffffee, 1);
+        light2.position.set(10, 5, 0);
         scene.add(light1);
-        scene.add(ligh2);
+        scene.add(light2);
 
         createPianoKeys(scene);
 
         light1.target = keys.current["C2"];
-        ligh2.target = keys.current["C6"];
+        light2.target = keys.current["C6"];
 
         const animate = () => {
             if (resizeRendererToDisplaySize(renderer, container)) {

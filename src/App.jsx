@@ -5,13 +5,14 @@ import Navbar from "./components/Navbar";
 import Devices from "./components/Devices";
 import Home from "./components/Home";
 import About from './components/About';
+import Settings from './components/Settings';
 import './App.css';
 
 function App() {
   const [notes, setNotes] = useState([]);
   const [midiInputDevices, setMidiInputDevices] = useState([]);
   const [currentDevice, setCurrentDevice] = useState(null);
-
+  const [displayMode, setDisplayMode] = useState("sharps")
   useEffect(() => {
     setMidiInputDevices(onEnabled());
   }, [setMidiInputDevices, setCurrentDevice, currentDevice]);
@@ -31,12 +32,10 @@ function App() {
       <Routes>
         <Route path="/" 
           element={
-            <Home midiInputDevices={midiInputDevices}
-              setMidiInputDevices={setMidiInputDevices}
+            <Home 
               currentDevice={currentDevice}
-              setCurrentDevice={setCurrentDevice}
               notes={notes}
-              setNotes={setNotes}
+              displayMode={displayMode}
             />
           } 
         />
@@ -52,6 +51,13 @@ function App() {
           }
         />
         <Route path="/about" element={<About />} />
+        <Route path='/settings' 
+          element={
+            <Settings displayMode={displayMode} 
+            setDisplayMode={setDisplayMode}
+            />
+          }
+        />
       </Routes>
     </>
   )
