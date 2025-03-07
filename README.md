@@ -53,3 +53,15 @@ And there we have it! Adding in the information we had previously about the bass
     npm i
     ```
 4. To run: `npm run dev`.
+
+## Chords Supported
+- Major (6th/7th/9th)
+- Minor (6th/7th/9th)
+- Augmented (7th)
+- Diminished (7th)
+- Dominant 7th/9th 
+- Half Diminished 7th 
+- Major 7th Sharp 5th 
+- sus2 
+- sus4 
+- add2 
