@@ -1,8 +1,12 @@
 .about-container {
     text-align: center;
     align-items: center;
-    margin-left: 30rem;
-    margin-right: 30rem;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    height: 100vh;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 .about-text {
